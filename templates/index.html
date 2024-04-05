@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>House Price Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body class="bg-dark">
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1>Welcome to House Predictor</h1>
+                <form method="post" accept-charset="UTF-8">
+                    <div class="row">
+                        <div class="col-md">
+                            <label><b>Select the Location: </b></label>
+                            <select name="location" id="location" class="selectpicker form-control" required="1">
+                                {% for location in locations %}
+                                <option value="{{ location }}">{{ location }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <label><b>Enter BHK: </b></label>
+                            <input type="text" class="form-control" id="bhk" name="bhk" placeholder="Enter BHK">
+                        </div>
+                        <div class="col-md">
+                            <label><b>Enter Number of Bathrooms: </b></label>
+                            <input type="text" class="form-control" id="bath" name="bath" placeholder="Enter Number of Bathrooms">
+                        </div>
+                        <div class="col-md">
+                            <label><b>Enter Square Feet: </b></label>
+                            <input type="text" class="form-control" id="total_sqft" name="total_sqft" placeholder="Enter Square Feet">
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn" onclick="send_data()">Predict Price</button>
+                        </div>
+                    </div>
+                </form>
+                <br>
+                <div class="col-md-1">
+                    <h3><span id="prediction"></span></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function form_handler(event) {
+            event.preventDefault();
+        }
+
+        function send_data() {
+            document.querySelector('form').addEventListener("submit", form_handler);
+            
+            var fd = new FormData(document.querySelector('form'));
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST','/predict',true);
+            document.getElementById("prediction").innerHTML = "Wait Predicting Price!...";
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == XMLHttpRequest.DONE){
+                    document.getElementById('prediction').innerHTML="Prediction: ₹"+xhr.responseText;
+
+                }
+            };
+
+            xhr.onload = function(){};
+            xhr.send(fd);
+        }
+    </script>
+</body>
+</html>

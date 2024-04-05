@@ -1,0 +1,25 @@
+/* navbar.css */
+
+.navbar {
+    background-color: #333; /* Background color of the navbar */
+    color: #fff; /* Text color of the navbar */
+    padding: 10px 20px; /* Padding inside the navbar */
+}
+
+.navbar .container {
+    display: flex; /* Display children elements in a row */
+    justify-content: space-between; /* Space elements evenly across the container */
+    max-width: 800px; /* Set a maximum width for the container */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+.navbar-brand,
+.nav-link {
+    color: #fff; /* Text color of the links */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.navbar-brand:hover,
+.nav-link:hover {
+    color: #ccc; /* Text color of the links on hover */
+}

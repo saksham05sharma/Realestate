@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Filter Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='filter.css') }}">
+</head>
+<body class="bg-dark">
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1>Property Finder</h1>
+                <form method="post" accept-charset="UTF-8" action="/filter">
+                    <div class="row">
+                        <div class="col-md">
+                            <label><b>Enter Target Price: </b></label>
+                            <input type="text" class="form-control" id="target_price" name="target_price" placeholder="Enter Target Price">
+                        </div>
+                        <div class="col-md">
+                            <button type="submit" class="btn">Filter</button>
+                        </div>
+                    </div>
+                </form>
+                <br>
+                <!-- Display filtered data here -->
+                <div class="row">
+                    <div class="col-md">
+                        <h2>Properties Available</h2>
+                        <table class="table table-dark">
+                            <thead>
+                                <tr>
+                                    <!-- Adjust column names accordingly -->
+                                    <th scope="col">Posted By</th>
+                                    <!-- <th scope="col">UNDER_CONSTRUCTION</th> -->
+                                    <!-- <th scope="col">Room Count</th> -->
+                                    <th scope="col">Type of property</th>
+                                    <th scope="col">Total area(in sqft)</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Price(in Lacs)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in filtered_data %}
+                                <tr>
+                                    <td>{{ row.POSTED_BY }}</td>
+                                    <!-- <td>{{ row.UNDER_CONSTRUCTION }}</td> -->
+                                    <!-- <td>{{ row.BHK_NO }}</td> -->
+                                    <!-- <td>{{ row['BHK_NO'] }}</td> -->
+                                    <td>{{ row.BHK_OR_RK }}</td>
+                                    <td>{{ row.SQUARE_FT }}</td>
+                                    <td>{{ row.ADDRESS }}</td>
+                                    <td>{{ row['TARGET(PRICE_IN_LACS)'] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

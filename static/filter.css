@@ -1,0 +1,43 @@
+body {
+    background-color: #343a40;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+.card {
+    background-color: #212529;
+    border: none;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+h1, h2 {
+    color: #ffc107;
+    justify-content: center; 
+    align-items: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ffc107;
+}
+
+th {
+    background-color: #343a40;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #454d55;
+}
