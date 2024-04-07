@@ -60,14 +60,29 @@ def predict():
 @app.route('/filter', methods=['GET', 'POST'])
 def filter_data():
     if request.method == 'POST':
-        target_price = float(request.form.get('target_price'))
+        try:
+            target_price = float(request.form.get('target_price'))
 
-        # Filter data based on target price
-        filtered_data = filterdata[filterdata['TARGET(PRICE_IN_LACS)'] <= target_price]
-
-        return render_template('filter.html', filtered_data=filtered_data.to_dict(orient='records'))
+            # Filter data based on target price
+            print(66, filterdata['TARGET_PRICE_IN_LACS'])
+            # filtered_data = filterdata[filterdata['TARGET_PRICE_IN_LACS'] <= target_price]
+            filtered_data = filterdata.query(f'TARGET_PRICE_IN_LACS <= {target_price}')
+            # print(filterdata.columns)
+            return render_template('filter.html', filtered_data=filtered_data.to_dict(orient='records'))
+        except Exception as e:
+            print('Error occured, see this: ', str(e))
 
     return render_template('filter.html')
+
+# @app.route('/filter',methods=['GET','POST'])
+# def filter_data():
+#     if request.method == 'POST':
+#         target_price = float(request.form.get('targetprice'))
+        
+#         filtered_data = filterdata[filterdata['TARGET(PRICE_IN_LACS)']<=target_price]
+#         return render_template('filter.html', filtered_data=filtered_data.to_dict(orient='records'))
+    
+#     return render_template('filter.html')
 
 
 
