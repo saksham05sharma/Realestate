@@ -40,22 +40,51 @@ model = Pipeline(steps=[('preprocessor', preprocessor),
 model.fit(X, y)
 
 # Define routes
-@app.route('/')
-def index():
+@app.route('/', methods=['GET'])
+def home():
+    return render_template('home.html')
+
+# @app.route('/register', methods=['POST'])
+# def register():
+#     # Get form data
+#     username = request.form['username']
+#     password = request.form['password']
+#     # Check if username already exists
+#     if username in users:
+#         return "Username already exists. Please choose a different one."
+#     else:
+#         # Add user to the database
+#         users[username] = password
+#         return redirect('/login')
+
+# @app.route('/login', methods=['POST'])
+# def login():
+#     # Get form data
+#     username = request.form['username']
+#     password = request.form['password']
+#     # Check if username and password match
+#     if username in users and users[username] == password:
+#         return "Login successful!"
+#     else:
+#         return "Invalid username or password. Please try again."
+
+@app.route('/predict', methods=['GET', 'POST'])
+def predict():
+    if request.method == 'POST':
+        location = request.form.get('location')
+        bhk = float(request.form.get('bhk'))
+        bath = float(request.form.get('bath'))
+        sqft = float(request.form.get('total_sqft'))
+
+        input_data = pd.DataFrame([[location, sqft, bath, bhk]], columns=['location', 'total_sqft', 'bath', 'bhk'])
+        prediction = model.predict(input_data)[0]*100000
+
+        return str(np.round(prediction, 2))
+
+    # For GET request, render index.html
     locations = sorted(data['location'].unique())
     return render_template('index.html', locations=locations)
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    location = request.form.get('location')
-    bhk = float(request.form.get('bhk'))
-    bath = float(request.form.get('bath'))
-    sqft = float(request.form.get('total_sqft'))
-
-    input_data = pd.DataFrame([[location, sqft, bath, bhk]], columns=['location', 'total_sqft', 'bath', 'bhk'])
-    prediction = model.predict(input_data)[0]*100000
-
-    return str(np.round(prediction,2))
 
 @app.route('/filter', methods=['GET', 'POST'])
 def filter_data():
@@ -73,16 +102,6 @@ def filter_data():
             print('Error occured, see this: ', str(e))
 
     return render_template('filter.html')
-
-# @app.route('/filter',methods=['GET','POST'])
-# def filter_data():
-#     if request.method == 'POST':
-#         target_price = float(request.form.get('targetprice'))
-        
-#         filtered_data = filterdata[filterdata['TARGET(PRICE_IN_LACS)']<=target_price]
-#         return render_template('filter.html', filtered_data=filtered_data.to_dict(orient='records'))
-    
-#     return render_template('filter.html')
 
 
 
