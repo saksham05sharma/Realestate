@@ -9,6 +9,11 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
 app = Flask(__name__)
 
+users = {'Saksham06': 'Saksham@0606'}
+
+# Global variable to track login status
+logged_in = False
+
 # Load and preprocess data
 data = pd.read_csv('Cleaned_data.csv')
 filterdata = pd.read_csv('Train.csv')
@@ -40,33 +45,49 @@ model = Pipeline(steps=[('preprocessor', preprocessor),
 model.fit(X, y)
 
 # Define routes
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def home():
+    global logged_in
+    if request.method == 'POST':
+        action = request.form['action']
+        if action == 'login':
+            return render_template('login.html')
+        elif action == 'register':
+            return render_template('register.html')
     return render_template('home.html')
 
-# @app.route('/register', methods=['POST'])
-# def register():
-#     # Get form data
-#     username = request.form['username']
-#     password = request.form['password']
-#     # Check if username already exists
-#     if username in users:
-#         return "Username already exists. Please choose a different one."
-#     else:
-#         # Add user to the database
-#         users[username] = password
-#         return redirect('/login')
+@app.route('/register', methods=['POST'])
+def register():
+    global logged_in
+    # Get form data
+    username = request.form['username']
+    password = request.form['password']
+    # Check if username already exists
+    if username in users:
+        return "Username already exists. Please choose a different one."
+    else:
+        # Add user to the database
+        users[username] = password
+        logged_in = True
+        return render_template('first.html')
 
-# @app.route('/login', methods=['POST'])
-# def login():
-#     # Get form data
-#     username = request.form['username']
-#     password = request.form['password']
-#     # Check if username and password match
-#     if username in users and users[username] == password:
-#         return "Login successful!"
-#     else:
-#         return "Invalid username or password. Please try again."
+@app.route('/login', methods=['POST'])
+def login():
+    global logged_in
+    # Get form data
+    username = request.form['username']
+    password = request.form['password']
+    # Check if username and password match
+    if username in users and users[username] == password:
+        logged_in = True
+        return render_template('first.html')  # Render the main carousel page after successful login
+    else:
+        return "Invalid username or password. Please try again."
+
+@app.route('/first')
+def first():
+    # Render the main carousel page
+    return render_template('first.html')
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
