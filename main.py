@@ -69,7 +69,7 @@ def register():
         # Add user to the database
         users[username] = password
         logged_in = True
-        return render_template('first.html')
+        return render_template('index.html')
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -80,7 +80,7 @@ def login():
     # Check if username and password match
     if username in users and users[username] == password:
         logged_in = True
-        return render_template('first.html')  # Render the main carousel page after successful login
+        return render_template('index.html')  # Render the main carousel page after successful login
     else:
         return "Invalid username or password. Please try again."
 
